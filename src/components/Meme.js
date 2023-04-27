@@ -1,66 +1,40 @@
-import React, { Fragment, useState } from "react";
-import {  Avatar,  Box,  Button,  Grid,  Paper,  TextField,  Typography,} from "@mui/material";
-import { toPng } from "html-to-image";
-import download from "downloadjs";
-const Meme = () => {
-  const [waterMark, setWaterMark] = useState("Sample Text");
+import React, { useState, useRef } from "react";
+import html2canvas from "html2canvas";
 
-  const down = () => {
-    toPng(document.getElementById("meme")).then((dataUrl) => {
-      download(dataUrl, "mymeme.png");
+function MemeGenerator() {
+  const [topText, setTopText] = useState("");
+  const [bottomText, setBottomText] = useState("");
+  const memeRef = useRef(null);
+
+  const generateMeme = () => {
+    html2canvas(memeRef.current).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "meme.png";
+      link.href = canvas.toDataURL();
+      link.click();
     });
   };
 
   return (
-    <Fragment>
-      <Grid container justifyContent="center">
-        <Grid xs={12} md={4}>
-          <Paper sx={{ p: 2 }}>
-            <TextField
-              fullWidth
-              sx={{ mb: 2 }}
-              value={waterMark}
-              onChange={(e) => setWaterMark(e.target.value)}
-            />
-            <Button
-              fullWidth
-              style={{ marginBottom: 2 }}
-              variant="contained"
-              color="secondary"
-            >
-              Next Image
-            </Button>
-            <Box>
-              <Avatar
-                id="meme"
-                //src="./logo192.png"
-                src={`https://unsplash.com/oauth/applications/440206/ofwo2xugUgjnZWvBVyC2zu7NaFQB4NKH2eGGnxynmmc`}
-                style={{ width: 300, height: 300 }}
-              />
-              <Typography
-                variant="h5"
-                style={{
-                  marginTop: -200,
-                  marginLeft: 100,
-                  position: "absolute",
-                  color: "#ffffff",
-                }}
-              >
-                {waterMark}
-              </Typography>
-            </Box>
-            <Button
-              onClick={down}
-              fullWidth
-              style={{ marginBottom: 2 }}
-              variant="contained"
-            >
-              Generate
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Fragment>
+    <div>
+      <div ref={memeRef}>
+        <img src="./sample.png" alt="meme" />
+        <div>{topText}</div>
+        <div>{bottomText}</div>
+      </div>
+      <input
+        type="text"
+        value={topText}
+        onChange={(e) => setTopText(e.target.value)}
+      />
+      <input
+        type="text"
+        value={bottomText}
+        onChange={(e) => setBottomText(e.target.value)}
+      />
+      <button onClick={generateMeme}>Download Meme</button>
+    </div>
   );
-};
-export default Meme;
+}
+
+export default MemeGenerator;
