@@ -17,10 +17,10 @@ function MemeGenerator() {
 
   return (
     <div>
-      <div ref={memeRef}>
-        <img src="./sample.png" alt="meme" />
-        <div>{topText}</div>
-        <div>{bottomText}</div>
+      <div ref={memeRef} style={{width:400}}>
+        <img src="./sample.png" style={{width:400}} alt="meme" />
+        <div style={{marginTop:-300,marginLeft:100,position:"absolute"}}>{topText}</div>
+        <div style={{marginTop:-60,marginLeft:100,position:"absolute"}}>{bottomText}</div>
       </div>
       <input
         type="text"
